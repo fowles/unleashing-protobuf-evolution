@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Protobuf Vision</title>
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="reveal.js/dist/theme/serif.css" id="theme" />
+    <link rel="stylesheet" href="highlight.js/styles/base16/summerfruit-light.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" />
+
+    <style>
+        .reveal.fade .slides > section, .reveal.fade .slides > section > section,
+        .reveal.none .slides > section, .reveal.none .slides > section > section {
+          min-height: 100% !important;
+          min-width: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important;
+          position: absolute !important;
+          top: 0 !important;
+          align-items: center !important;
+        }
+
+        .background {
+          background: #f0f1eb;
+          border-radius: 10px;
+          padding: 20px;
+          opacity: 90%;
+        }
+
+        .quarter {
+          width: 50%;
+          height: 50%;
+          background-size: cover;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+<!-- .slide: data-background="./antikythera.jpg" -->
+<!-- .slide: data-background-size="105%" -->
+
+NOTES:
+
+* Evolvability
+* Predictability
+* Performance
+* Convergence
+
+---
+
+<!-- .slide: data-background="./babbage.jpg" -->
+<!-- .slide: data-background-size="100%" -->
+
+NOTES:
+
+Evolvability -- dangers of ossification
+
+---
+
+<!-- .slide: data-background="./tides.jpg" -->
+<!-- .slide: data-background-size="100%" -->
+
+NOTES:
+
+Predictability -- not stasis
+
+---
+
+<!-- .slide: data-background="./quantum.jpg" -->
+<!-- .slide: data-background-size="100%" -->
+
+NOTES:
+
+Performance -- multidimensional and foundational
+
+---
+
+<!-- .slide: data-background="./integrator.jpg" -->
+<!-- .slide: data-background-size="100%" -->
+
+NOTES:
+
+Convergence -- consistency across dialects, fewest reasonable number of components
+
+---
+
+<!-- .slide: data-background-color="black" -->
+
+<div class="fragment absolute top-0 left-0 quarter"  style="background-image: url('./babbage.jpg')"></div>
+<div class="fragment absolute top-0 right-0 quarter" style="background-image: url('./tides.jpg')"></div>
+<div class="fragment absolute bottom-0 right-0 quarter" style="background-image: url('./quantum.jpg')"></div>
+<div class="fragment absolute bottom-0 left-0 quarter" style="background-image: url('./integrator.jpg')"></div>
+
+NOTES:
+
+* Evolvability
+* Predictability
+* Performance
+* Convergence
+
+---
+
+<!-- .slide: data-background="./antikythera.jpg" -->
+<!-- .slide: data-background-size="105%" -->
+
+NOTES:
+
+Evolvability/Predictability/Performance/Convergence
+
+          </textarea>
+        </section>
+      </div>
+    </div>
+
+    <script src="./reveal.js/dist/reveal.js"></script>
+    <script src="./reveal.js/plugin/notes/notes.js"></script>
+    <script src="./reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="./reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="./reveal.js/plugin/zoom/zoom.js"></script>
+    <script type='module'>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        transition: 'fade',
+        navigationMode: 'linear',
+        dependencies: [
+          { src: '//cdn.jsdelivr.net/npm/reveal-plantuml' },
+        ],
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom],
+      });
+    </script>
+  </body>
+</html>
