@@ -52,12 +52,12 @@ can learn from.
 <!-- .slide: data-background="./snakes.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-<div class="area">
+<div class=area>
 Python 2 to 3<br/>
 <ul>
-<li class="fragment"><code>2to3</code> tool</li>
-<li class="fragment"><code>import __future__</code></li>
-<li class="fragment">The <code>six<code> package</li>
+<li class=fragment><code>2to3</code> tool</li>
+<li class=fragment><code>import __future__</code></li>
+<li class=fragment>The <code>six<code> package</li>
 </ul>
 </div>
 
@@ -86,40 +86,80 @@ incrementality in transitions make life easier.**
 <div class=area>
 Protobuf Evolution<br/>
 <ul>
-<li>Wire format
-<li>Proto language
-<li>API
+<li>Wire format</li>
+<li>Proto language</li>
+<li>Generated APIs</li>
 </ul>
 </div>
 
 NOTES:
 
-* SLOW DOWN
-* What do we mean when we say protobuf evoltion
-* Potentially many things, here are some of them from hardest to easiest
-* Easiest doesn't mean easy!
+**SLOW DOWN**
+
+Let's back up and talk about what we even mean for protobuf evolution though.
+This could mean a lot of things, but I think this is a broadly encompassing
+list from hardest to easiest.
+
+**But easiest doesn't mean easy!**
+
+Right, so let's go into them.
+
+*ADVANCE*
 
 ---
+<!-- .slide: data-background="./wire-splices.jpg" -->
+<!-- .slide: data-background-size="contain" -->
 
+<div class="area fragment">
 Protobuf Wire Format Evolution
+</div>
 
 NOTES:
 
-* SLOW DOWN
-* Existing rules for adding/removing fields (good well scoped, battle tested)
-* Novel tag types (bad scary)
-* Sketch of the decade long efforts required here
+**SLOW DOWN**
+
+The wire format is definitely the hardest thing to evolve.  Because it spans
+time in a way that code fundamentally doesn't.  You have two sides of a network
+connection, or data written to disk sometime in the nebulous past.
+
+**Fortunately, this format was designed pretty well with respect to evolution of
+individual messages.  It has clear rules for adding and removing fields.  You
+could imagine adding new tag types.**
+
+Yeah, but that requires updating parsers to accept the new format and wait years
+to decades for all existing parsers to roll out updates before serializers can
+emit them.  This is the sort of effort that we only want to do one a decade or
+so.
+
+**And right now we have our sights elsewhere.**
+
+*ADVANCE*
 
 ---
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
 
+<div class="area fragment">
 Proto Language Evolution
+</div>
 
 NOTES:
 
-* SLOW DOWN
-* Requires updating all parsers and code generators
-* Data at rest/over the network/should work both ways (or this is a wire format break)
-* Sketch of how this is measured in years
+**SLOW DOWN**
+
+Language evolution is a bit easier.
+
+*ADVANCE*
+
+You have to update parsers, and if they change modifies descriptor.proto then
+you have to update all the code generators as well.  If we want to do this, it
+is best if files start with something early on them makes them unparsable to
+older versions of the compiler. Also, it is important that the changed proto
+language does not require any wire format changes or you are in the previous
+situation.
+
+**We should probably explain what descriptor.proto is ::quick explanation of
+descriptor.proto as the AST for code generators to interact with::**
 
 ---
 
