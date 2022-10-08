@@ -1,43 +1,96 @@
 <!-- .slide: data-background="./antikythera.jpg" -->
-<!-- .slide: data-background-size="105%" -->
 
-<div class="background" style="border-radius: 10px">
-  <h4 style="margin-bottom: 0;">Unleashing Protocol Buffers Evolution</h4>
-  <a style="font-size: 1.1rem;" href="https://github.com/fowles/unleashing-protobuf-evolution">https://github.com/fowles/unleashing-protobuf-evolution</a>
-  <h5>by Matt Kulukundis and Miguel Young de la Sota</h5>
+<div class="area fragment">
+Unleashing Protocol Buffers Evolution<br/>
+<a style="font-size: 1.1rem;" href="https://github.com/fowles/unleashing-protobuf-evolution">https://github.com/fowles/unleashing-protobuf-evolution</a><br/>
+by Matt Kulukundis and Miguel Young de la Sota
 </div>
+
 <div style="font-size: 0.8rem; color: white" class="absolute bottom-0">press "S" for speaker view</div>
 
 NOTES:
 
-* SLOW DOWN
+**SLOW DOWN**
+
+Hi folks, I'm Matt **and I am Miguel**.
+
+*ADVANCE*
+
+Welcome to our talk about protobuf evolution.  This talk is meant to both
+motivate and give a sneak peak of upcoming work in the protobuf ecosystem.
+
+*ADVANCE*
 
 ---
 
-Python 2->3
+<!-- .slide: data-background="./snakes.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area fragment">
+Python 2 to 3
+</div>
+
 
 NOTES:
 
-* SLOW DOWN
-* Why was this even attempted in the first place? (e.g. is change good, in the abstract?)
-* 2to3 tool helped
-* import future helped
-* still too large a bite to swallow easily
+**SLOW DOWN**
+
+I guess we should start with what do we mean by evolution.  **Actually Matt,
+let's start with something concrete.**
+
+*ADVANCE*
+
+**How about the evolution of python 2 to python 3?**
+
+Sure, that was a painful transition, but I think there are some good points we
+can learn from.
+
+*ADVANCE*
 
 ---
 
-Incrementality is the key
+<!-- .slide: data-background="./snakes.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area">
+Python 2 to 3<br/>
+<ul>
+<li class="fragment"><code>2to3</code> tool</li>
+<li class="fragment"><code>import __future__</code></li>
+<li class="fragment">The <code>six<code> package</li>
+</ul>
+</div>
 
 NOTES:
 
-* SLOW DOWN
+**SLOW DOWN**
+
+Sure, that was a painful transition, but I think there are some good points we
+can learn from.
+
+*ADVANCE* The 2to3 tool helped a lot despite its rough edges.
+
+*ADVANCE* **Also, `import __future__` allowed libraries to pre-migrate before
+the rest of code was ready.**
+
+*ADVANCE* Right, and the `six` package provided a way to span the divide.  But
+even despite all that, the change was just too large to smoothly adjust for.
+
+**Yeah, but the key pattern is obvious.  Things that allow for flexibility and
+incrementality in transitions make life easier.**
+
 
 ---
+<!-- .slide: data-background="./antikythera.jpg" -->
 
-Protobuf Evolution
-* Wire format
-* Proto language
-* API
+<div class=area>
+Protobuf Evolution<br/>
+<ul>
+<li>Wire format
+<li>Proto language
+<li>API
+</ul>
+</div>
 
 NOTES:
 
