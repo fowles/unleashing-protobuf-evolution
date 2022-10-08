@@ -52,12 +52,12 @@ can learn from.
 <!-- .slide: data-background="./snakes.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-<div class=area>
+<div class="area">
 Python 2 to 3<br/>
 <ul>
-<li class=fragment><code>2to3</code> tool</li>
-<li class=fragment><code>import __future__</code></li>
-<li class=fragment>The <code>six<code> package</li>
+<li class="fragment"><code>2to3</code> tool</li>
+<li class="fragment"><code>import __future__</code></li>
+<li class="fragment">The <code>six<code> package</li>
 </ul>
 </div>
 
@@ -83,7 +83,7 @@ incrementality in transitions make life easier.**
 ---
 <!-- .slide: data-background="./antikythera.jpg" -->
 
-<div class=area>
+<div class="area">
 Protobuf Evolution<br/>
 <ul>
 <li>Wire format</li>
@@ -161,26 +161,52 @@ situation.
 **We should probably explain what descriptor.proto is ::quick explanation of
 descriptor.proto as the AST for code generators to interact with::**
 
+**SLOW DOWN**
+
 ---
 
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area fragment">
 Proto Generated API Evolution
+</div>
 
 NOTES:
 
-* SLOW DOWN
-* Currently only allowed as a major break; same problems as Python!
-* proto2->proto3 doesn’t exist (and proto3 wasn't designed with it in mind).
-* Proto Import future doesn’t exist!
-* How do we cut up our food so we can take smaller bites?
+**SLOW DOWN**
+
+Generated API evolution has a huge potential to unlock performance wins.  It
+would let us fix historical mistakes and replace inefficient designs.
+
+*ADVANCE*
+
+**Unfortunately, we are currently in a worse state then Python 2 to 3.  We don't
+have any tools or mechanisms for incremental evolution.**
+
+So the question becomes, how do design the equivalents of `2to3` and `import
+__future__` for protobuf languages.
+
 
 ---
 
-Evolve the Proto Language
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area">
+Proto Tiller
+</div>
 
 NOTES:
 
-* SLOW DOWN
-* Hopefully we only have to do this once, by installing explicitly evolution into the schema
+**SLOW DOWN**
+
+Our first step here is pretty easy.  A tool for programmatic manipulation of
+proto files.
+
+---
+
+TODO(kfm): demo of basic prototiller usage
 
 ---
 
