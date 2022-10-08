@@ -81,6 +81,7 @@ incrementality in transitions make life easier.**
 
 
 ---
+
 <!-- .slide: data-background="./antikythera.jpg" -->
 
 <div class="area">
@@ -107,6 +108,7 @@ Right, so let's go into them.
 *ADVANCE*
 
 ---
+
 <!-- .slide: data-background="./wire-splices.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
@@ -136,6 +138,7 @@ so.
 *ADVANCE*
 
 ---
+
 <!-- .slide: data-background="./vowel-shift.svg" -->
 <!-- .slide: data-background-size="contain" -->
 
@@ -210,21 +213,25 @@ TODO(kfm): demo of basic prototiller usage
 
 ---
 
-Editions!
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area fragment">
+Editions and Features
+</div>
+
 
 NOTES:
 
-* SLOW DOWN
-* Needs to provide a concept of incrementality
+**SLOW DOWN**
+
+**Our second step is far more interesting.  We need to design a something that
+allows has a concept of units of evolution, a "future" from which we can
+import them, and a way to say when that future has arrived.**
 
 ---
 
-Features!
-
-NOTES:
-
-* SLOW DOWN
-* Need to separate language bindings to avoid a centralized choke point
+TODO(mcyoung): demo explanation of editions and features
 
 ---
 
