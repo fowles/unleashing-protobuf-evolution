@@ -556,7 +556,8 @@ What if we had a simple tool to automate upgrading of proto files?
 edition = "2023";
 
 message Person {
-  string name = 1;
+  string name = 1
+    [features.(pb.cpp).string_type = STRING_VIEW];
   string address = 2;
 }
 ```
@@ -574,8 +575,8 @@ It would take a file like this and a simple command
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-```bash
-prototiller upgrade --edition=2024 person.proto
+```json
+$ prototiller upgrade --edition=2024 person.proto
 ```
 
 NOTES:
@@ -591,87 +592,127 @@ and simply import past for you automatically.
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-```proto
+```proto []
 edition = "2024";
-
-features.(pb.cpp).string_type = STRING;
 
 message Person {
   string name = 1;
-  string address = 2;
+  string address = 2
+    [features.(pb.cpp).string_type = STRING];
 }
+```
+
+NOTES:
+
+Or even allowed more fine grained control of modifications.
+
+**SLOW DOWN**
+
+---
+
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```json
+$ cat change.spec
+actions {
+  remove_field {
+    fully_qualified_name: "Person.address"
+    reserve_number: true
+    reserve_name: false
+  }
+}
+$ prototiller change person.proto --spec=change.spec
 ```
 
 NOTES:
 
 **SLOW DOWN**
 
+With a rich set of primitives, people can evolve their own codebases safely.
+
+*ADVANCE*
+
 ---
 
-Per Language Features!
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+edition = "2024";
+
+message Person {
+  string name = 1;
+  reserved 2;
+}
+```
 
 NOTES:
 
-* SLOW DOWN
-* Sketch of using this for a single evolution
-* switching from const std::string& to std::string_view
-* why would you want it?
-* Modern, more flexible C++ type.
-* Enables memory-saving optimizations we can't do right now.
-* how would you implement it?
-* features.(pb.cpp).string_field_type
-* how would you deploy it?
-* incrementally!
+but we can take it a step further and encode smarts into the tool
+
+**SLOW DOWN**
 
 ---
 
-Incremental deployment, you say?!
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```json
+$ cat change.spec
+actions {
+  change_type {
+    fully_qualified_name: "Person.address"
+    new_type: "int32"
+  }
+}
+$ prototiller change person.proto --spec=change.spec
+ERROR: changing `Person.address` from `string` to `int32`
+breaks wire format compatibility of the message `Person`.
+
+Use `--force_unsafe_changes` to apply it anyway.
+```
 
 NOTES:
 
-* SLOW DOWN
+**SLOW DOWN**
+
+With a rich set of primitives, people can evolve their own codebases safely.
+
+*ADVANCE*
 
 ---
 
-prototiller – our 2to3 tool on steroids
+<!-- .slide: data-background="./time.jpg" -->
 
-NOTES:
-
-* SLOW DOWN
-
----
-
-features – a way to import future
-
-NOTES:
-
-* SLOW DOWN
-
----
-
-editions – how you know the future has arrived
-
-NOTES:
-
-* SLOW DOWN
-* tests! – you have tests right?
-* Yeah, but you have a monorepo.  What about folks in the real world?
-* stick with an edition for many years
-* upgrade as you need new features
-
----
-
+<div class="area fragment">
 Timeline
+</div>
 
 NOTES:
 
-* SLOW DOWN
-* Well, this is kinda embarrassing, vaporware right now?
-* A lot of core design work is done, next up is prototiller and protoc support
+**SLOW DOWN**
+
+Well, this is kinda embarrassing.  
+
+*ADVANCE*
+
+Honestly, this is most a sneak peak of where we are going.  Most of this is
+vaporware right now...
+
+**A lot of core design work is done.  We are hoping to start breaking ground on
+prototiller any minute now and have early support in parsers and code generators
+for editions next year.**
+
+*ADVANCE*
 
 ---
 
+<!-- .slide: data-background="./time.jpg" -->
+
+<div class="area fragment">
 Questions?
+</div>
 
 NOTES:
 
