@@ -18,10 +18,205 @@ Hi folks, I'm Matt **and I am Miguel**.
 
 Welcome to our talk about protobuf evolution.  This talk is meant to both
 motivate and give a sneak peak of upcoming work in the protobuf ecosystem.
+Evolution for protobufs are a highly multidimensional thing, so we will try to
+split apart the dimensions a bit.
 
 *ADVANCE*
 
 -----
+<!-- .slide: data-background="./antikythera.jpg" -->
+
+<div class="area">
+<pre><code class="language-plantuml"><script type="text/template">
+digraph g {
+  bgcolor = "transparent";
+  rankdir=LR;
+  node [
+    fontname = "courier";
+    shape = none;
+  ];
+  Disk [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Disk</td></tr>
+      </table>
+    >;
+  ];
+  Server [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Server</td></tr>
+      </table>
+    >;
+  ];
+  Client [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Client</td></tr>
+      </table>
+    >;
+  ];
+  Disk -> Server [dir="both"];
+  Server -> Client [dir="both"];
+}
+</script></code></pre>
+</div>
+
+NOTES:
+
+**SLOW DOWN**
+
+Consider a very basic system.  What are the entitites that can evolve here?
+
+*ADVANCE*
+
+---
+<!-- .slide: data-background="./antikythera.jpg" -->
+
+<div class="area">
+<pre><code class="language-plantuml"><script type="text/template">
+digraph g {
+  bgcolor = "transparent";
+  rankdir=LR;
+  node [
+    fontname = "courier";
+    shape = none;
+  ];
+  Disk [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Disk v0</td></tr>
+        <tr><td port="v1">Disk v1</td></tr>
+        <tr><td port="v2">Disk v2</td></tr>
+      </table>
+    >;
+  ];
+  Server [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Server v0</td></tr>
+        <tr><td port="v1">Server v1</td></tr>
+        <tr><td port="v2">Server v2</td></tr>
+      </table>
+    >;
+  ];
+  Client [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Client v0</td></tr>
+        <tr><td port="v1">Client v1</td></tr>
+      </table>
+    >;
+  ];
+  Disk:v0 -> Server:v0 [dir="both"];
+  Disk:v2 -> Server:v1 [dir="both"];
+  Server:v2 -> Client:v0 [dir="both"];
+}
+</script></code></pre>
+</div>
+
+NOTES:
+
+**SLOW DOWN**
+
+We can evolve all of these pieces independently. This is the kind of evolution
+that protobuf was designed for. Adding fields, marking old fields as reserved,
+handling of unknown fields.  This is the bread and butter of the protobuf
+ecosystem.
+
+**Those little wires between boxes.  Those are the protobuf wire format.**
+
+*ADVANCE*
+
+---
+<!-- .slide: data-background="./wire-splices.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area fragment">
+Protobuf Wire Format Evolution
+</div>
+
+NOTES:
+
+**SLOW DOWN**
+
+**Evolving that is the work of decades because it has to smoothly communicate
+from the oldest thing written on disk all the way forward to the newest client
+and server code. It spans time in a way that code fundamentally doesn't.**
+
+*ADVANCE*
+
+Fortunately, this format was designed pretty well with respect to evolution of
+individual messages.  It has clear rules for adding and removing fields.  You
+could imagine adding new tag types. But even that requires updating parsers to
+accept the new format and wait years to decades for all existing parsers to roll
+out updates before serializers can emit them.  This is the sort of effort that
+we only want to do one a decade or so.
+
+*ADVANCE*
+
+---
+<!-- .slide: data-background="./antikythera.jpg" -->
+
+<div class="area">
+<pre><code class="language-plantuml"><script type="text/template">
+digraph g {
+  bgcolor = "transparent";
+  rankdir=LR;
+  node [
+    fontname = "courier";
+    shape = none;
+  ];
+  Server [
+    fontsize=30;
+    label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        <tr><td port="v0">Server v0</td></tr>
+        <tr><td port="v1">Server v1</td></tr>
+        <tr><td port="v2">Server v2</td></tr>
+      </table>
+    >;
+  ];
+}
+</script></code></pre>
+</div>
+
+NOTES:
+
+**SLOW DOWN**
+
+But if we zoom in on a single component.  This is the evolution of a single
+piece of software.  Adding features, upgrading libraries, updating language
+versions.  All the things that go into a single piece of software.
+
+**Notably protobuf has strong primitives for the first type of evolution
+but has zero primitives for the second type.  Any update to the generated
+APIs of protobuf must be entirely atomic for a project.**
+
+*ADVANCE*
+
+-----
+<!-- .slide: data-background="./citation.png" -->
+
+NOTES:
+
+**SLOW DOWN**
+
+Of course, upgrading languages should be hard and there is nothing to be done
+about it.
+
+**Actually Matt, maybe we can look at some specific ones to see if they give us
+ideas.**
+
+*ADVANCE*
+
+---
 
 <!-- .slide: data-background="./snakes.jpg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -79,7 +274,6 @@ even despite all that, the change was just too large to smoothly adjust for.
 **Yeah, but the key pattern is obvious.  Things that allow for flexibility and
 incrementality in transitions make life easier.**
 
-
 -----
 
 <!-- .slide: data-background="./antikythera.jpg" -->
@@ -87,7 +281,7 @@ incrementality in transitions make life easier.**
 <div class="area">
 Protobuf Evolution<br/>
 <ul>
-<li>Wire format</li>
+<li><strike>Wire format</strike></li>
 <li>Proto language</li>
 <li>Generated APIs</li>
 </ul>
@@ -97,43 +291,8 @@ NOTES:
 
 **SLOW DOWN**
 
-Let's back up and talk about what we even mean for protobuf evolution though.
-This could mean a lot of things, but I think this is a broadly encompassing
-list from hardest to easiest.
-
-**But easiest doesn't mean easy!**
-
-Right, so let's go into them.
-
-*ADVANCE*
-
----
-
-<!-- .slide: data-background="./wire-splices.jpg" -->
-<!-- .slide: data-background-size="contain" -->
-
-<div class="area fragment">
-Protobuf Wire Format Evolution
-</div>
-
-NOTES:
-
-**SLOW DOWN**
-
-The wire format is definitely the hardest thing to evolve.  Because it spans
-time in a way that code fundamentally doesn't.  You have two sides of a network
-connection, or data written to disk sometime in the nebulous past.
-
-**Fortunately, this format was designed pretty well with respect to evolution of
-individual messages.  It has clear rules for adding and removing fields.  You
-could imagine adding new tag types.**
-
-Yeah, but that requires updating parsers to accept the new format and wait years
-to decades for all existing parsers to roll out updates before serializers can
-emit them.  This is the sort of effort that we only want to do one a decade or
-so.
-
-**And right now we have our sights elsewhere.**
+So how do we apply this concept to protobuf evolution.  In particular, can we
+use language evolution to enable generated API evolution.
 
 *ADVANCE*
 
@@ -150,19 +309,19 @@ NOTES:
 
 **SLOW DOWN**
 
-Language evolution is a bit easier.
+Language evolution is way simpler than wire format evolution
 
 *ADVANCE*
 
-You have to update parsers, and if the change modifies descriptor.proto then
-you have to update all the code generators as well.  If we want to do this, it
-is best if files start with something early on them makes them unparsable to
-older versions of the compiler. Also, it is important that the changed proto
-language does not require any wire format changes or you are in the previous
-situation.
+You have to update parsers, and if the change modifies semantics in any
+meaningful way, then you have to update all the code generators as well.
 
-**We should probably explain what descriptor.proto is *::quick explanation of
-descriptor.proto as the AST for code generators to interact with::***
+**If we want to do this, it is best if `.proto` files start with something
+that makes the syntax difference obvious so old parsers don't confuse
+themselves.**
+
+Also, it is important that the changed proto language does not require any wire
+format changes or you are in the previous situation.
 
 **SLOW DOWN**
 
@@ -180,19 +339,19 @@ NOTES:
 **SLOW DOWN**
 
 Generated API evolution has huge potential to unlock performance wins.  It lets
-us fix historical mistakes and replace inefficient designs.
+us fix historical mistakes and replace inefficient designs.  This is the target
+we are actually aiming for.
 
 *ADVANCE*
 
 **Unfortunately, we are currently in a worse state then Python 2 to 3.  We don't
-have any tools or mechanisms for incremental evolution.**
+have any tools or mechanisms for incremental evolution. So the question becomes,
+how do design the equivalents of `2to3` and `import __future__` for protobuf
+languages.**
 
-So the question becomes, how do design the equivalents of `2to3` and `import
-__future__` for protobuf languages.
 
-
-**Actually, we should start with the second step so we can understand where we
-are going before we plan the path to get there.**
+Actually, we should start with the second step so we can understand where we
+are going before we plan the path to get there.
 
 *ADVANCE*
 
@@ -227,19 +386,12 @@ things in the future.**
 ```proto
 syntax = "proto3";
 ```
-<!-- .element: class="fragment" -->
 
 NOTES:
 
 **SLOW DOWN**
 
-**What language evolution can we make that will allow us smoothly migrate things
-in the future.**
-
-*ADVANCE*
-
-**To start with we will borrow a concept from `rust` -- language editions.
-Let's take our old trustworthy `syntax` production and give it a shiny new coat.**
+**We can change the original `syntax` declaration to editions.**
 
 *ADVANCE*
 
