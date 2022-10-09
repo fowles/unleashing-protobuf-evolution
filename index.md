@@ -138,10 +138,6 @@ ecosystem.
 <!-- .slide: data-background="./wire-splices.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-<div class="area fragment">
-Protobuf Wire Format Evolution
-</div>
-
 NOTES:
 
 **SLOW DOWN**
@@ -149,8 +145,6 @@ NOTES:
 **Evolving that is the work of decades because it has to smoothly communicate
 from the oldest thing written on disk all the way forward to the newest client
 and server code. It spans time in a way that code fundamentally doesn't.**
-
-*ADVANCE*
 
 Fortunately, this format was designed pretty well with respect to evolution of
 individual messages.  It has clear rules for adding and removing fields.  You
@@ -203,6 +197,7 @@ APIs of protobuf must be entirely atomic for a project.**
 
 -----
 <!-- .slide: data-background="./citation.png" -->
+<!-- .slide: data-background-size="contain" -->
 
 NOTES:
 
@@ -230,12 +225,9 @@ NOTES:
 
 **SLOW DOWN**
 
-I guess we should start with what do we mean by evolution.  **Actually Matt,
-let's start with something concrete.**
+**How about the evolution of python 2 to python 3?**
 
 *ADVANCE*
-
-**How about the evolution of python 2 to python 3?**
 
 Sure, that was a painful transition, but I think there are some good points we
 can learn from.
@@ -263,16 +255,25 @@ NOTES:
 Sure, that was a painful transition, but I think there are some good points we
 can learn from.
 
-*ADVANCE* The 2to3 tool helped a lot despite its rough edges.
+*ADVANCE*
 
-*ADVANCE* **Also, `import __future__` allowed libraries to pre-migrate before
+The `2to3` tool helped a lot despite its rough edges.
+
+*ADVANCE*
+
+**`import __future__` allowed libraries to pre-migrate before
 the rest of code was ready.**
 
-*ADVANCE* Right, and the `six` package provided a way to span the divide.  But
-even despite all that, the change was just too large to smoothly adjust for.
+*ADVANCE*
+
+The `six` package provided a way to span the divide.  But
+even despite all that, the change was just too large to smoothly incorporate
+into large systems.
 
 **Yeah, but the key pattern is obvious.  Things that allow for flexibility and
-incrementality in transitions make life easier.**
+more incremental migrations make life easier.**
+
+*ADVANCE*
 
 -----
 
@@ -301,27 +302,16 @@ use language evolution to enable generated API evolution.
 <!-- .slide: data-background="./vowel-shift.svg" -->
 <!-- .slide: data-background-size="contain" -->
 
-<div class="area fragment">
-Proto Language Evolution
-</div>
-
 NOTES:
 
 **SLOW DOWN**
 
-Language evolution is way simpler than wire format evolution
+**Language evolution is way simpler than wire format evolution.**
 
-*ADVANCE*
-
-You have to update parsers, and if the change modifies semantics in any
-meaningful way, then you have to update all the code generators as well.
-
-**If we want to do this, it is best if `.proto` files start with something
-that makes the syntax difference obvious so old parsers don't confuse
-themselves.**
-
-Also, it is important that the changed proto language does not require any wire
-format changes or you are in the previous situation.
+**You have to update parsers, and if the change modifies semantics in any
+meaningful way, then you have to update all the code generators as well. Also,
+it is important that the changed proto language does not require any wire format
+changes or you are in the previous situation.**
 
 **SLOW DOWN**
 
@@ -329,10 +319,6 @@ format changes or you are in the previous situation.
 
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
-
-<div class="area fragment">
-Proto Generated API Evolution
-</div>
 
 NOTES:
 
@@ -342,16 +328,10 @@ Generated API evolution has huge potential to unlock performance wins.  It lets
 us fix historical mistakes and replace inefficient designs.  This is the target
 we are actually aiming for.
 
-*ADVANCE*
-
 **Unfortunately, we are currently in a worse state then Python 2 to 3.  We don't
 have any tools or mechanisms for incremental evolution. So the question becomes,
-how do design the equivalents of `2to3` and `import __future__` for protobuf
-languages.**
-
-
-Actually, we should start with the second step so we can understand where we
-are going before we plan the path to get there.
+how do we design the equivalents of `2to3` and `import __future__` for the proto
+language and all its code generators.**
 
 *ADVANCE*
 
@@ -374,7 +354,7 @@ things in the future.**
 
 *ADVANCE*
 
-**To start with we will borrow a concept from `rust` -- language editions.**
+**To start with we will borrow a concept from the `rust` language: *editions*.**
 
 *ADVANCE*
 
@@ -391,7 +371,7 @@ NOTES:
 
 **SLOW DOWN**
 
-**We can change the original `syntax` declaration to editions.**
+**We can change the original `syntax` declaration to `edition`.**
 
 *ADVANCE*
 
@@ -409,10 +389,10 @@ NOTES:
 **SLOW DOWN**
 
 **Now we have something that ticks a bit faster then the full syntax, but that
-doesn't really tell us what it does.  In a real sense this simply gives us the
-version number of python2 vs python3.  We need something like `import __future__`
-to make is useful.  We could make our life even easier if we also had an `import
-__past__`.**
+doesn't tell us what it actually does.  In a real sense this simply gives us the
+version number of python2 vs python3.  We need something like `import
+__future__` to make is useful.  We could make our life even easier if we also
+had an `import __past__`.**
 
 *ADVANCE*
 
@@ -591,7 +571,7 @@ NOTES:
 edition = "2023";
 
 message Person {
-  string name = 1 
+  string name = 1
     [features.(pb.cpp).string_type = STRING_VIEW];
   string address = 2;
 }
@@ -601,10 +581,9 @@ NOTES:
 
 **SLOW DOWN**
 
-**Then we can use features to `import __future__` for this field.  At core here,
-is the idea that an `edition` sepecifies a set of defaults for different
-`features`, but that a user can override them at either a file or field level.
-So when the time comes to upgrade the entire file.**
+**At core here, is the idea that an `edition` sepecifies a set of defaults for
+different `features`, but that a user can override them at either a file or
+field level. So when the time comes to upgrade the entire file.**
 
 *ADVANCE*
 
@@ -718,7 +697,7 @@ NOTES:
 
 **SLOW DOWN**
 
-It would take a file like this and a simple command
+It would take a file like this and a single command
 
 *ADVANCE*
 
@@ -735,7 +714,7 @@ NOTES:
 
 **SLOW DOWN**
 
-and simply import past for you automatically.
+and it would import past for you automatically.
 
 *ADVANCE*
 
@@ -829,7 +808,14 @@ NOTES:
 
 **SLOW DOWN**
 
-With a rich set of primitives, people can evolve their own codebases safely.
+By making the tool aware of protobuf semantics, we can teach it how to ensure
+the the edits it makes are safe from multiple perspectives.  Safe from a wire
+format evolution perspective, or no-ops from a generated code perspective.
+
+We hope that this tool will provide a baseline capability for the protobuf
+ecosystem that has value far beyond simply updating to the latest edition.
+
+**All this sounds great, but when can I have it?**
 
 *ADVANCE*
 
@@ -838,19 +824,15 @@ With a rich set of primitives, people can evolve their own codebases safely.
 <!-- .slide: data-background="./time.jpg" -->
 
 <div class="area fragment">
-Timeline
+Questions?
 </div>
 
 NOTES:
 
 **SLOW DOWN**
 
-Well, this is kinda embarrassing.  
-
-*ADVANCE*
-
-Honestly, this is most a sneak peak of where we are going.  Most of this is
-vaporware right now...
+Well, this is kinda embarrassing.  Honestly, this is most a sneak peak of where
+we are going.  Most of this is vaporware right now...
 
 **A lot of core design work is done.  We are hoping to start breaking ground on
 prototiller any minute now and have early support in parsers and code generators
@@ -858,14 +840,5 @@ for editions next year.**
 
 *ADVANCE*
 
------
+REPEAT THE QUESTION
 
-<!-- .slide: data-background="./time.jpg" -->
-
-<div class="area">
-Questions?
-</div>
-
-NOTES:
-
-* REPEAT THE QUESTION
