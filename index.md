@@ -154,15 +154,15 @@ Language evolution is a bit easier.
 
 *ADVANCE*
 
-You have to update parsers, and if they change modifies descriptor.proto then
+You have to update parsers, and if the change modifies descriptor.proto then
 you have to update all the code generators as well.  If we want to do this, it
 is best if files start with something early on them makes them unparsable to
 older versions of the compiler. Also, it is important that the changed proto
 language does not require any wire format changes or you are in the previous
 situation.
 
-**We should probably explain what descriptor.proto is ::quick explanation of
-descriptor.proto as the AST for code generators to interact with::**
+**We should probably explain what descriptor.proto is *::quick explanation of
+descriptor.proto as the AST for code generators to interact with::***
 
 **SLOW DOWN**
 
@@ -179,8 +179,8 @@ NOTES:
 
 **SLOW DOWN**
 
-Generated API evolution has a huge potential to unlock performance wins.  It
-would let us fix historical mistakes and replace inefficient designs.
+Generated API evolution has huge potential to unlock performance wins.  It lets
+us fix historical mistakes and replace inefficient designs.
 
 *ADVANCE*
 
@@ -189,6 +189,345 @@ have any tools or mechanisms for incremental evolution.**
 
 So the question becomes, how do design the equivalents of `2to3` and `import
 __future__` for protobuf languages.
+
+
+**Actually, we should start with the second step so we can understand where we
+are going before we plan the path to get there.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area fragment">
+Editions
+</div>
+
+
+NOTES:
+
+**SLOW DOWN**
+
+**What language evolution can we make that will allow us to smoothly migrate
+things in the future.**
+
+*ADVANCE*
+
+**To start with we will borrow a concept from `rust` -- language editions.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto
+syntax = "proto3";
+```
+<!-- .element: class="fragment" -->
+
+NOTES:
+
+**SLOW DOWN**
+
+**What language evolution can we make that will allow us smoothly migrate things
+in the future.**
+
+*ADVANCE*
+
+**To start with we will borrow a concept from `rust` -- language editions.
+Let's take our old trustworthy `syntax` production and give it a shiny new coat.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto
+edition = "2023";
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**Now we have something that ticks a bit faster then the full syntax, but that
+doesn't really tell us what it does.  In a real sense this simply gives us the
+version number of python2 vs python3.  We need something like `import __future__`
+to make is useful.  We could make our life even easier if we also had an `import
+__past__`.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area">
+Editions and <b>Features</b>
+</div>
+
+NOTES:
+
+**SLOW DOWN**
+
+**Features are the mechanism to provide us both `import __future__` and `import
+__past__` incrementally.  This will probably be easier to explain if we look at
+a concrete example.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+message Person {
+  string name = 1;
+}
+```
+<!-- .element: class="fragment" -->
+
+NOTES:
+
+**SLOW DOWN**
+
+We are currently in a bit of a knot around strings.
+
+*ADVANCE*
+
+Consider this message and the C++ that it generates.
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```cc [|4]
+class Person : public Message {
+ public:
+  const std::string& get_name() const;
+  void set_name(const std::string& name);
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+For those loosely familiar with C++, this doesn't seem so bad, but it has two
+important shortcomings.
+
+*ADVANCE*
+
+This setter means that a caller must have a `std::string`.  There are relatively
+easy migrations that allow us to change this to use a `std::string_view`.
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```cc [4|3]
+class Person : public Message {
+ public:
+  const std::string& get_name() const;
+  void set_name(std::string_view name);
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+In fact, we have already done those as they don't officially break the API.
+
+*ADVANCE*
+
+This accessor, on the other hand, means that a `std::string` must exist inside
+the representation of `Person`. As a result, we are highly constrained in how we
+can implement `Person`.  What if we knew from runtime data that `name` was
+always between 3 and 14 bytes? Then we are wasting spacing by having a
+`std::string`!
+
+If instead we returned an opaque handle to the data,
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```cc [3]
+class Person : public Message {
+ public:
+  std::string_view get_name() const;
+  void set_name(std::string_view name);
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+Then we could apply a variety of optimizations internally:  like custom memory
+sizing, storing as a pascal string, or avoiding `std::string` destructors
+entirely.  So how do we use *features* to help us get there?
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+message Person {
+  string name = 1;
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**To start out we can make it explicit what edition we are on and consider a
+slightly more compilicated proto.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+edition = "2023";
+
+message Person {
+  string name = 1;
+  string address = 2;
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**Now we can use features to `import __future__` for a single field.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto [1,4-5]
+edition = "2023";
+
+message Person {
+  string name = 1 
+    [features.(pb.cpp).string_type = STRING_VIEW];
+  string address = 2;
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**Then we can use features to `import __future__` for this field.  At core here,
+is the idea that an `edition` sepecifies a set of defaults for different
+`features`, but that a user can override them at either a file or field level.
+So when the time comes to upgrade the entire file.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto [1,5-6]
+edition = "2024";
+
+message Person {
+  string name = 1;
+  string address = 2
+    [features.(pb.cpp).string_type = STRING];
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**You can `import __past__` for the parts that aren't ready yet.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gcl.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto [1,3]
+edition = "2024";
+
+features.(pb.cpp).string_type = STRING;
+
+message Person {
+  string name = 1;
+  string address = 2;
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**Alternately, if all the strings in this file were not ready, we can simply
+specify the feature at the top level.**
+
+**As an aside, you may be asking yourselves "what is this syntax?".  This is an
+existing syntax in protobuf files for *custom options*.  The only new grammar
+production required for this is for the first `edition` line.**
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background-size="contain" -->
+
+<div class="area">
+Editions and Features
+</div>
+
+NOTES:
+
+**SLOW DOWN**
+
+**Using custom options allows each language generator spaces to evolve its own
+features independently.  This allows third-party language generators to play on
+equal footing with the ones built into `protoc`. Together these give us `import
+__future__`, `import __past__`, and a way to know what time it is.  But we still
+need a `2to3` tool.**
+
+*ADVANCE*
 
 
 ---
@@ -204,34 +543,68 @@ NOTES:
 
 **SLOW DOWN**
 
-Our first step here is pretty easy.  A tool for programmatic manipulation of
-proto files.
+What if we had a simple tool to automate upgrading of proto files?
+
+*ADVANCE*
 
 ---
 
-TODO(kfm): demo of basic prototiller usage
-
----
-
-<!-- .slide: data-background="./vowel-shift.svg" -->
+<!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-<div class="area fragment">
-Editions and Features
-</div>
+```proto []
+edition = "2023";
 
+message Person {
+  string name = 1;
+  string address = 2;
+}
+```
 
 NOTES:
 
 **SLOW DOWN**
 
-**Our second step is far more interesting.  We need to design a something that
-allows has a concept of units of evolution, a "future" from which we can
-import them, and a way to say when that future has arrived.**
+It would take a file like this and a simple command
+
+*ADVANCE*
 
 ---
 
-TODO(mcyoung): demo explanation of editions and features
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```bash
+prototiller upgrade --edition=2024 person.proto
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+and simply import past for you automatically.
+
+*ADVANCE*
+
+---
+
+<!-- .slide: data-background="./gopher-science.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto
+edition = "2024";
+
+features.(pb.cpp).string_type = STRING;
+
+message Person {
+  string name = 1;
+  string address = 2;
+}
+```
+
+NOTES:
+
+**SLOW DOWN**
 
 ---
 
