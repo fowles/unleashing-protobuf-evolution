@@ -21,7 +21,7 @@ motivate and give a sneak peak of upcoming work in the protobuf ecosystem.
 
 *ADVANCE*
 
----
+-----
 
 <!-- .slide: data-background="./snakes.jpg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -80,7 +80,7 @@ even despite all that, the change was just too large to smoothly adjust for.
 incrementality in transitions make life easier.**
 
 
----
+-----
 
 <!-- .slide: data-background="./antikythera.jpg" -->
 
@@ -196,7 +196,7 @@ are going before we plan the path to get there.**
 
 *ADVANCE*
 
----
+-----
 
 <!-- .slide: data-background="./vowel-shift.svg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -283,7 +283,7 @@ a concrete example.**
 
 *ADVANCE*
 
----
+-----
 
 <!-- .slide: data-background="./gcl.svg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -508,7 +508,7 @@ production required for this is for the first `edition` line.**
 
 *ADVANCE*
 
----
+-----
 
 <!-- .slide: data-background="./vowel-shift.svg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -530,7 +530,7 @@ need a `2to3` tool.**
 *ADVANCE*
 
 
----
+-----
 
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -681,7 +681,7 @@ With a rich set of primitives, people can evolve their own codebases safely.
 
 *ADVANCE*
 
----
+-----
 
 <!-- .slide: data-background="./time.jpg" -->
 
@@ -706,11 +706,11 @@ for editions next year.**
 
 *ADVANCE*
 
----
+-----
 
 <!-- .slide: data-background="./time.jpg" -->
 
-<div class="area fragment">
+<div class="area">
 Questions?
 </div>
 
