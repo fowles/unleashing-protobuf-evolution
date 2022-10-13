@@ -618,7 +618,7 @@ NOTES:
 ```proto [1,3]
 edition = "2024";
 
-features.(pb.cpp).string_type = STRING;
+option features.(pb.cpp).string_type = STRING;
 
 message Person {
   string name = 1;
@@ -652,7 +652,7 @@ NOTES:
 
 **SLOW DOWN**
 
-**Using custom options allows each language generator spaces to evolve its own
+**Using custom options allows each language generator space to evolve its own
 features independently.  This allows third-party language generators to play on
 equal footing with the ones built into `protoc`. Together these give us `import
 __future__`, `import __past__`, and a way to know what time it is.  But we still
@@ -683,29 +683,6 @@ What if we had a simple tool to automate upgrading of proto files?
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-```proto []
-edition = "2023";
-
-message Person {
-  string name = 1
-    [features.(pb.cpp).string_type = STRING_VIEW];
-  string address = 2;
-}
-```
-
-NOTES:
-
-**SLOW DOWN**
-
-It would take a file like this and a single command
-
-*ADVANCE*
-
----
-
-<!-- .slide: data-background="./gopher-science.jpg" -->
-<!-- .slide: data-background-size="contain" -->
-
 ```json
 $ prototiller upgrade --edition=2024 person.proto
 ```
@@ -714,7 +691,8 @@ NOTES:
 
 **SLOW DOWN**
 
-and it would import past for you automatically.
+It would take a file like this and a single command and it would import past for
+you automatically.
 
 *ADVANCE*
 
@@ -723,7 +701,19 @@ and it would import past for you automatically.
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-```proto []
+```proto [1,4-5]
+edition = "2023";
+
+message Person {
+  string name = 1
+    [features.(pb.cpp).string_type = STRING_VIEW];
+  string address = 2;
+}
+```
+```json
+$ prototiller upgrade --edition=2024 person.proto
+```
+```proto [1,5-6]
 edition = "2024";
 
 message Person {
@@ -735,9 +725,12 @@ message Person {
 
 NOTES:
 
-Or even allowed more fine grained control of modifications.
-
 **SLOW DOWN**
+
+Or we could allowed more fine grained control of modifications.
+
+*ADVANCE*
+
 
 ---
 
