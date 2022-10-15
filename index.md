@@ -667,7 +667,7 @@ need a `2to3` tool.**
 <!-- .slide: data-background-size="contain" -->
 
 <div class="area">
-Proto Tiller
+<code>prototiller</code>
 </div>
 
 NOTES:
@@ -762,7 +762,20 @@ With a rich set of primitives, people can evolve their own codebases safely.
 <!-- .slide: data-background="./gopher-science.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-```proto []
+```proto [5]
+edition = "2024";
+
+message Person {
+  string name = 1;
+  string address = 2;
+}
+```
+
+```json
+$ prototiller change person.proto --spec=change.spec
+```
+
+```proto [5]
 edition = "2024";
 
 message Person {
