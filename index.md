@@ -238,15 +238,15 @@ NOTES:
 **SLOW DOWN**
 
 **Fortunately, protobuf has semantics for unknown fields baked into it.  Schema
-evolution has been planned for from the beginning.  This sort of evolution is
-the bread and butter of protobuf.**
+evolution has been planned for from the beginning and is thus handled
+smoothly.**
 
 You could imagine adding new tag types. But that requires updating parsers to
-accept the new format and wait years to decades for all existing parsers to roll
-out updates before serializers can emit them.  This is the sort of effort that
-we only want to do once a decade.  But we are focused neither on Schema Message
-Evolution (which is well handled) nor on Wire Format Evolution.  We are focused
-on API evolution.
+accept the new format and waiting years to decades for all existing parsers to
+roll out updates before serializers can emit them.  This is the sort of effort
+that we only want to do once a decade.  But we are focused neither on Schema
+Message Evolution (which is well handled) nor on Wire Format Evolution.  We are
+focused on API evolution.
 
 *ADVANCE*
 
@@ -391,7 +391,7 @@ we are actually aiming for.  How do we apply the lessons from python 2 to 3 to
 this problem?
 
 So how do we apply this concept to protobuf?  What we want is to powerful
-primitives to enable evolution of generated APIs. Byt, we are currently in a
+primitives to enable evolution of generated APIs. But, we are currently in a
 worse state then Python 2 to 3.  We don't have any tools or mechanisms for
 incremental evolution.
 
@@ -441,9 +441,9 @@ NOTES:
 **SLOW DOWN**
 
 **Before diving into editions though, we need to understand what `syntax =
-"proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big
-bundle of configuration knobs in an immutable configuration.  There is no
-incrementality to them.  There is no control over the knobs directly.**
+"proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big bundle of
+immutable configuration knobs.  There is no incrementality to them.  There is no
+control over the knobs directly.**
 
 **This rigidity is one of our major problems.  Instead we will use *editions*.**
 
@@ -762,8 +762,8 @@ NOTES:
 
 **SLOW DOWN**
 
-It would take a file like this and a single command and it would import past for
-you automatically.
+It would take a single command and would update a file for you automatically,
+adding `import __past__` and removing `import __future__` as needed.
 
 *ADVANCE*
 
