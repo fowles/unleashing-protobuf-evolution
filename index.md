@@ -130,7 +130,8 @@ that protobuf was designed for. Adding fields, marking old fields as reserved,
 handling of unknown fields.  This is the bread and butter of the protobuf
 ecosystem.
 
-**Those little wires between boxes.  Those are the protobuf wire format.**
+**Those little wires between boxes.  Those are the protobuf wire format.  Let's
+walk though a basic example of *Schema Evolution*.**
 
 *ADVANCE*
 
@@ -138,20 +139,114 @@ ecosystem.
 <!-- .slide: data-background="./wire-splices.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
+```proto []
+message Person {
+  string name = 1;
+}
+```
+<!-- .element: class="fragment" -->
+
+```
+00000000: 0a17 4d69 6775 656c  ..Miguel
+00000008: 2059 6f75 6e67 2064   Young d
+00000010: 6520 6c61 2053 6f74  e la Sot
+00000018: 6f                   o
+```
+<!-- .element: class="fragment" -->
+
 NOTES:
 
 **SLOW DOWN**
 
-**Evolving that is the work of decades because it has to smoothly communicate
-from the oldest thing written on disk all the way forward to the newest client
-and server code. It spans time in a way that code fundamentally doesn't.**
+**We can start with a simple message**
 
-Fortunately, this format was designed pretty well with respect to evolution of
-individual messages.  It has clear rules for adding and removing fields.  You
-could imagine adding new tag types. But even that requires updating parsers to
+*ADVANCE*
+
+**along with the wire format that someone might get from it.  The first byte
+`0A` indicates field 1 has length encoded content.  The second byte `17` is the
+length of the string field.  Rather then inflict too much more binary on you
+though, I am going to switch to protoscope's notation.  Protoscope is a tool
+for decoding protobuf wireformat in a slightly nicer way.**
+
+*ADVANCE*
+
+---
+<!-- .slide: data-background="./wire-splices.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+message Person {
+  string name = 1;
+}
+```
+
+```
+1: {"Miguel Young de la Soto"}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**Now imagine the client had a newer schema for person that included an address
+field.**
+
+*ADVANCE*
+
+---
+<!-- .slide: data-background="./wire-splices.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+message Person {
+  string name = 1;
+  string address = 2;
+}
+```
+
+```
+1: {"Miguel Young de la Soto"}
+2: {"Cambridge, MA"}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**When this message comes to an old version of the server it will see something
+like.**
+
+*ADVANCE*
+
+---
+<!-- .slide: data-background="./wire-splices.jpg" -->
+<!-- .slide: data-background-size="contain" -->
+
+```proto []
+message Person {
+  string name = 1;
+}
+```
+
+```
+1: {"Miguel Young de la Soto"}
+2: {"Cambridge, MA"}
+```
+
+NOTES:
+
+**SLOW DOWN**
+
+**Fortunately, protobuf has semantics for unknown fields baked into it.  Schema
+evolution has been planned for from the beginning.  This sort of evolution is
+the bread and butter of protobuf.**
+
+You could imagine adding new tag types. But that requires updating parsers to
 accept the new format and wait years to decades for all existing parsers to roll
 out updates before serializers can emit them.  This is the sort of effort that
-we only want to do one a decade or so.
+we only want to do once a decade.  But we are focused neither on Schema Message
+Evolution (which is well handled) nor on Wire Format Evolution.  We are focused
+on API evolution.
 
 *ADVANCE*
 
@@ -185,13 +280,14 @@ NOTES:
 
 **SLOW DOWN**
 
-But if we zoom in on a single component.  This is the evolution of a single
-piece of software.  Adding features, upgrading libraries, updating language
-versions.  All the things that go into a single piece of software.
+Consider the evolution of one componenet, a single piece of software.  Adding
+features, upgrading libraries, updating language versions.  All the things that
+go into a single piece of software.
 
-**Notably protobuf has strong primitives for the first type of evolution
-but has zero primitives for the second type.  Any update to the generated
-APIs of protobuf must be entirely atomic for a project.**
+Notably protobuf has strong primitives for the first type of evolution but has
+zero primitives for the second type.  Any update to the generated APIs of
+protobuf must be entirely atomic for a project. Of course, upgrading languages
+should be hard and there is nothing to be done about it.
 
 *ADVANCE*
 
@@ -202,9 +298,6 @@ APIs of protobuf must be entirely atomic for a project.**
 NOTES:
 
 **SLOW DOWN**
-
-Of course, upgrading languages should be hard and there is nothing to be done
-about it.
 
 **Actually Matt, maybe we can look at some specific ones to see if they give us
 ideas.**
@@ -292,50 +385,23 @@ NOTES:
 
 **SLOW DOWN**
 
-So how do we apply this concept to protobuf evolution.  In particular, can we
-use language evolution to enable generated API evolution.
-
-*ADVANCE*
-
----
-
-<!-- .slide: data-background="./vowel-shift.svg" -->
-<!-- .slide: data-background-size="contain" -->
-
-NOTES:
-
-**SLOW DOWN**
-
-**Language evolution is way simpler than wire format evolution.**
-
-**You have to update parsers, and if the change modifies semantics in any
-meaningful way, then you have to update all the code generators as well. Also,
-it is important that the changed proto language does not require any wire format
-changes or you are in the previous situation.**
-
-**SLOW DOWN**
-
----
-
-<!-- .slide: data-background="./gopher-science.jpg" -->
-<!-- .slide: data-background-size="contain" -->
-
-NOTES:
-
-**SLOW DOWN**
-
 Generated API evolution has huge potential to unlock performance wins.  It lets
 us fix historical mistakes and replace inefficient designs.  This is the target
-we are actually aiming for.
+we are actually aiming for.  How do we apply the lessons from python 2 to 3 to
+this problem?
 
-**Unfortunately, we are currently in a worse state then Python 2 to 3.  We don't
-have any tools or mechanisms for incremental evolution. So the question becomes,
-how do we design the equivalents of `2to3` and `import __future__` for the proto
-language and all its code generators.**
+So how do we apply this concept to protobuf?  What we want is to powerful
+primitives to enable evolution of generated APIs. Byt, we are currently in a
+worse state then Python 2 to 3.  We don't have any tools or mechanisms for
+incremental evolution.
+
+**So the question becomes, how do we create the equivalents of `2to3` and
+`import __future__` for protobuf.  How do we evolve the schema language (that is
+to say `.proto` files), so it provides rich primitives for API evolution.**
 
 *ADVANCE*
 
------
+---
 
 <!-- .slide: data-background="./vowel-shift.svg" -->
 <!-- .slide: data-background-size="contain" -->
@@ -344,13 +410,16 @@ language and all its code generators.**
 Editions
 </div>
 
-
 NOTES:
 
 **SLOW DOWN**
 
-**What language evolution can we make that will allow us to smoothly migrate
-things in the future.**
+**Fortunately, language evolution is way simpler than wire format evolution.**
+
+**You have to update parsers, and if the change modifies semantics in any
+meaningful way, then you have to update all the code generators as well. Also,
+it is important that the changed proto language does not require any wire format
+changes or you are in the previous situation.**
 
 *ADVANCE*
 
@@ -371,7 +440,12 @@ NOTES:
 
 **SLOW DOWN**
 
-**We can change the original `syntax` declaration to `edition`.**
+**Before diving into editions though, we need to understand what `syntax =
+"proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big
+bundle of configuration knobs in an immutable configuration.  There is no
+incrementality to them.  There is no control over the knobs directly.**
+
+**This rigidity is one of our major problems.  Instead we will use *editions*.**
 
 *ADVANCE*
 
@@ -388,11 +462,8 @@ NOTES:
 
 **SLOW DOWN**
 
-**Now we have something that ticks a bit faster then the full syntax, but that
-doesn't tell us what it actually does.  In a real sense this simply gives us the
-version number of python2 vs python3.  We need something like `import
-__future__` to make is useful.  We could make our life even easier if we also
-had an `import __past__`.**
+**Rather than immutable configuration, an edition is a set of defaults that can
+be overriden.   We call these things can be configured *features*.**
 
 *ADVANCE*
 
