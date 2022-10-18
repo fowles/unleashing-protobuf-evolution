@@ -150,7 +150,7 @@ message Person {
 00000000: 0a17 4d69 6775 656c  ..Miguel
 00000008: 2059 6f75 6e67 2064   Young d
 00000010: 6520 6c61 2053 6f74  e la Sot
-00000018: 6f                   o
+00000018: 61                   a
 ```
 <!-- .element: class="fragment" -->
 
@@ -180,8 +180,9 @@ message Person {
 }
 ```
 
-```
-1: {"Miguel Young de la Soto"}
+``` [2]
+# github.com/protocolbuffers/protoscope
+1: {"Miguel Young de la Sota"}
 ```
 
 NOTES:
@@ -204,8 +205,9 @@ message Person {
 }
 ```
 
-```
-1: {"Miguel Young de la Soto"}
+``` [2,3]
+# github.com/protocolbuffers/protoscope
+1: {"Miguel Young de la Sota"}
 2: {"Cambridge, MA"}
 ```
 
@@ -222,14 +224,16 @@ like.**
 <!-- .slide: data-background="./wire-splices.jpg" -->
 <!-- .slide: data-background-size="contain" -->
 
-```proto []
+```proto [1,2,4]
 message Person {
   string name = 1;
+  string address = 2;
 }
 ```
 
-```
-1: {"Miguel Young de la Soto"}
+``` [2,3]
+# github.com/protocolbuffers/protoscope
+1: {"Miguel Young de la Sota"}
 2: {"Cambridge, MA"}
 ```
 
@@ -443,7 +447,8 @@ NOTES:
 **Before diving into editions though, we need to understand what `syntax =
 "proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big bundle of
 immutable configuration knobs.  There is no incrementality to them.  There is no
-control over the knobs directly.**
+control over the knobs directly.  No one had a migration plan for `proto2` to
+`proto3`.**
 
 **This rigidity is one of our major problems.  Instead we will use *editions*.**
 
