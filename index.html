@@ -54,6 +54,9 @@
     <script src="./reveal.js/plugin/markdown/markdown.js"></script>
     <script src="./reveal.js/plugin/highlight/highlight.js"></script>
     <script src="./reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="./viz.js/viz.js"></script>
+    <script src="./viz.js/full.render.js"></script>
+    <script src="./viz.js/plugin.js"></script>
     <script type='module'>
       // More info about initialization & config:
       // - https://revealjs.com/initialization/
@@ -63,12 +66,7 @@
         slideNumber: true,
         transition: 'fade',
         navigationMode: 'linear',
-        dependencies: [
-          { src: '//cdn.jsdelivr.net/npm/reveal-plantuml' },
-        ],
-
-        // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom],
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom, VizPlugin],
       });
     </script>
   </body>

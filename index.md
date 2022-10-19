@@ -27,7 +27,7 @@ split apart the dimensions a bit.
 <!-- .slide: data-background="./antikythera.jpg" -->
 
 <div class="area">
-<pre><code class="language-plantuml"><script type="text/template">
+<pre><code class="graph"><script type="text/template">
 digraph g {
   bgcolor = "transparent";
   rankdir=LR;
@@ -77,7 +77,7 @@ Consider a very basic system.  What are the entitites that can evolve here?
 <!-- .slide: data-background="./antikythera.jpg" -->
 
 <div class="area">
-<pre><code class="language-plantuml"><script type="text/template">
+<pre><code class="graph"><script type="text/template">
 digraph g {
   bgcolor = "transparent";
   rankdir=LR;
@@ -258,7 +258,7 @@ focused on API evolution.
 <!-- .slide: data-background="./antikythera.jpg" -->
 
 <div class="area">
-<pre><code class="language-plantuml"><script type="text/template">
+<pre><code class="graph"><script type="text/template">
 digraph g {
   bgcolor = "transparent";
   rankdir=LR;
