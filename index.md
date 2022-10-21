@@ -883,7 +883,7 @@ $ prototiller change person.proto --spec=change.spec
 ERROR: changing `Person.address` from `string` to `int32`
 breaks wire format compatibility of the message `Person`.
 
-Use `--force_unsafe_changes` to apply it anyway.
+Use `--allow_unsafe_changes` to apply it anyway.
 ```
 
 NOTES:
