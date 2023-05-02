@@ -3,7 +3,7 @@
 <div class="area fragment">
 Unleashing Protocol Buffers Evolution<br/>
 <a style="font-size: 1.1rem;" href="https://github.com/fowles/unleashing-protobuf-evolution">https://github.com/fowles/unleashing-protobuf-evolution</a><br/>
-by Matt Kulukundis and Miguel Young de la Sota
+by Matt Kulukundis and Mike Kruskal
 </div>
 
 <div style="font-size: 0.8rem; color: white" class="absolute bottom-0">press "S" for speaker view</div>
@@ -12,7 +12,7 @@ NOTES:
 
 **SLOW DOWN**
 
-Hi folks, I'm Matt **and I am Miguel**.
+Hi folks, I'm Matt **and I'm Mike**.
 
 *ADVANCE*
 
@@ -147,10 +147,10 @@ message Person {
 <!-- .element: class="fragment" -->
 
 ```
-00000000: 0a17 4d69 6775 656c  ..Miguel
-00000008: 2059 6f75 6e67 2064   Young d
-00000010: 6520 6c61 2053 6f74  e la Sot
-00000018: 61                   a
+00000000: 0a17 4d61 7474 6865  ..Matthe
+00000008: 7720 466f 776c 6573  w Fowles
+00000010: 204b 756c 756b 756e   Kulukun
+00000018: 6469 73              dis
 ```
 <!-- .element: class="fragment" -->
 
@@ -182,7 +182,7 @@ message Person {
 
 ``` [2]
 # github.com/protocolbuffers/protoscope
-1: {"Miguel Young de la Sota"}
+1: {"Matthew Kulukundis"}
 ```
 
 NOTES:
@@ -207,8 +207,8 @@ message Person {
 
 ``` [2,3]
 # github.com/protocolbuffers/protoscope
-1: {"Miguel Young de la Sota"}
-2: {"Cambridge, MA"}
+1: {"Matthew Kulukundis"}
+2: {"New York, NY"}
 ```
 
 NOTES:
@@ -233,8 +233,8 @@ message Person {
 
 ``` [2,3]
 # github.com/protocolbuffers/protoscope
-1: {"Miguel Young de la Sota"}
-2: {"Cambridge, MA"}
+1: {"Matthew Kulukundis"}
+2: {"New York, NY"}
 ```
 
 NOTES:
@@ -322,7 +322,7 @@ NOTES:
 
 **SLOW DOWN**
 
-**How about the evolution of python 2 to python 3?**
+**What about the evolution of python 2 to python 3?**
 
 *ADVANCE*
 
@@ -400,8 +400,8 @@ worse state then Python 2 to 3.  We don't have any tools or mechanisms for
 incremental evolution.
 
 **So the question becomes, how do we create the equivalents of `2to3` and
-`import __future__` for protobuf.  How do we evolve the schema language (that is
-to say `.proto` files), so it provides rich primitives for API evolution.**
+`import __future__` for protobuf.  How do we evolve the schema language defining
+`.proto` files, so it provides rich primitives for API evolution.**
 
 *ADVANCE*
 
@@ -423,11 +423,11 @@ NOTES:
 **You have to update parsers, and if the change modifies semantics in any
 meaningful way, then you have to update all the code generators as well. Also,
 it is important that the changed proto language does not require any wire format
-changes or you are in the previous situation.**
+changes or you are back in the situation we mentioned earlier.**
 
 *ADVANCE*
 
-**To start with we will borrow a concept from the `rust` language: *editions*.**
+**To start with we will borrow a concept from the `rust` language called *editions*.**
 
 *ADVANCE*
 
@@ -446,11 +446,11 @@ NOTES:
 
 **Before diving into editions though, we need to understand what `syntax =
 "proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big bundle of
-immutable configuration knobs.  There is no incrementality to them.  There is no
-control over the knobs directly.  No one had a migration plan for `proto2` to
+immutable configuration switches.  There is nothing incremental between them.  There is no
+control over the switches directly.  No one had a migration plan for `proto2` to
 `proto3`.**
 
-**This rigidity is one of our major problems.  Instead we will use *editions*.**
+**This rigidity is one of our major problems.  Instead we will pivot to *editions*.**
 
 *ADVANCE*
 
@@ -468,7 +468,7 @@ NOTES:
 **SLOW DOWN**
 
 **Rather than immutable configuration, an edition is a set of defaults that can
-be overriden.   We call these things can be configured *features*.**
+be overriden.   We call each of these configurable things *features*.**
 
 *ADVANCE*
 
@@ -612,7 +612,7 @@ NOTES:
 **SLOW DOWN**
 
 **To start out we can make it explicit what edition we are on and consider a
-slightly more compilicated proto.**
+slightly more complicated proto.**
 
 *ADVANCE*
 
@@ -657,7 +657,7 @@ NOTES:
 
 **SLOW DOWN**
 
-**At core here, is the idea that an `edition` sepecifies a set of defaults for
+**The core idea here, is that an `edition` specifies a set of defaults for
 different `features`, but that a user can override them at either a file or
 field level. So when the time comes to upgrade the entire file.**
 
@@ -709,9 +709,9 @@ NOTES:
 **Alternately, if all the strings in this file were not ready, we can simply
 specify the feature at the top level.**
 
-**As an aside, you may be asking yourselves "what is this syntax?".  This is an
-existing syntax in protobuf files for *custom options*.  The only new grammar
-production required for this is for the first `edition` line.**
+**As an aside, you may be asking yourselves "what is this syntax we're using?".  This is a
+pre-existing syntax in protobuf files for *custom options*.  The only changes to the protobuf
+grammar required for this are for the first `edition` line.**
 
 *ADVANCE*
 
@@ -891,13 +891,13 @@ NOTES:
 **SLOW DOWN**
 
 By making the tool aware of protobuf semantics, we can teach it how to ensure
-the the edits it makes are safe from multiple perspectives.  Safe from a wire
+that the edits it makes are safe from multiple perspectives.  Safe from a wire
 format evolution perspective, or no-ops from a generated code perspective.
 
 We hope that this tool will provide a baseline capability for the protobuf
 ecosystem that has value far beyond simply updating to the latest edition.
 
-**All this sounds great, but when can I have it?**
+**All this sounds great, but when can I use it?**
 
 *ADVANCE*
 
@@ -916,9 +916,9 @@ NOTES:
 Well, this is kinda embarrassing.  Honestly, this is most a sneak peak of where
 we are going.  Most of this is vaporware right now...
 
-**A lot of core design work is done.  We are hoping to start breaking ground on
-prototiller any minute now and have early support in parsers and code generators
-for editions next year.**
+**Most of the core design work is done.  We have already started implementing
+these and hope to release prototiller this year, along with early support in
+parsers and code generators for editions next year.**
 
 *ADVANCE*
 
