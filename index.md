@@ -182,7 +182,7 @@ message Person {
 
 ``` [2]
 # github.com/protocolbuffers/protoscope
-1: {"Matthew Kulukundis"}
+1: {"Matthew Fowles Kulukundis"}
 ```
 
 NOTES:
@@ -207,7 +207,7 @@ message Person {
 
 ``` [2,3]
 # github.com/protocolbuffers/protoscope
-1: {"Matthew Kulukundis"}
+1: {"Matthew Fowles Kulukundis"}
 2: {"New York, NY"}
 ```
 
@@ -233,7 +233,7 @@ message Person {
 
 ``` [2,3]
 # github.com/protocolbuffers/protoscope
-1: {"Matthew Kulukundis"}
+1: {"Matthew Fowles Kulukundis"}
 2: {"New York, NY"}
 ```
 
