@@ -130,8 +130,8 @@ that protobuf was designed for. Adding fields, marking old fields as reserved,
 handling of unknown fields.  This is the bread and butter of the protobuf
 ecosystem.
 
-**Those little wires between boxes.  Those are the protobuf wire format.  Let's
-walk though a basic example of *Schema Evolution*.**
+**Those little wires between all the boxes are the protobuf wire format.  Let's
+zoom in a bit and walk though a basic example of *Schema Evolution*.**
 
 *ADVANCE*
 
@@ -167,10 +167,9 @@ NOTES:
 *ADVANCE*
 
 **The first byte `0A` indicates field 1 has length encoded content.  The
-second byte `17` is the length of the string field.  Rather than inflict
-too much more binary on you though, I am going to switch to protoscope's
-notation.  Protoscope is a tool for decoding protobuf wireformat in a
-slightly nicer way.**
+second byte `17` is the length of the string field.  Rather than inflicting
+too much more binary on you though, I'm going to introduce you to a new tool
+that we developed for decoding the protobuf wireformat in a slightly nicer way.**
 
 *ADVANCE*
 
@@ -193,7 +192,8 @@ NOTES:
 
 **SLOW DOWN**
 
-**Now imagine the client had a newer schema for person that included an address
+**This notation is equivalent to the encoded binary, but is much more readable.
+Now imagine the client had a newer schema for person that included an address
 field.**
 
 *ADVANCE*
@@ -245,9 +245,9 @@ NOTES:
 
 **SLOW DOWN**
 
-**Fortunately, protobuf has semantics for unknown fields baked into it.  Schema
-evolution has been planned for from the beginning and is thus handled
-smoothly.**
+**The server won't know about the address field, but fortunately Protobuf
+has semantics for unknown fields baked into it.  Schema evolution has been
+planned for from the beginning and is therefore handled smoothly.**
 
 You could imagine adding new tag types. But that requires updating parsers to
 accept the new format and waiting years to decades for all existing parsers to
