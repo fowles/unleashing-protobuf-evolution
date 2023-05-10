@@ -288,7 +288,7 @@ NOTES:
 
 **SLOW DOWN**
 
-Consider the evolution of one componenet, a single piece of software.  Adding
+Consider the evolution of one component, a single piece of software.  Adding
 features, upgrading libraries, updating language versions.  All the things that
 go into a single piece of software.
 
