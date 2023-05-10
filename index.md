@@ -923,9 +923,9 @@ NOTES:
 Well, this is kinda embarrassing.  Honestly, this is most a sneak peak of where
 we are going.  Most of this is vaporware right now...
 
-**Most of the core design work is done.  We've already started implementing
+Most of the core design work is done.  We've already started implementing
 these and hope to release prototiller this year.  Early support in
-parsers and code generators for editions should be ready next year.**
+parsers and code generators for editions should be ready next year.
 
 *ADVANCE*
 
