@@ -400,7 +400,7 @@ this problem?
 
 So how do we apply this concept to protobuf?  What we want is to powerful
 primitives to enable evolution of generated APIs. But, we are currently in a
-worse state then Python 2 to 3.  We don't have any tools or mechanisms for
+worse state than Python 2 to 3.  We don't have any tools or mechanisms for
 incremental evolution.
 
 **So the question becomes, how do we create the equivalents of `2to3` and
