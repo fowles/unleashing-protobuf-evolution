@@ -1,9 +1,9 @@
 <!-- .slide: data-background="./antikythera.jpg" -->
 
 <div class="area fragment">
-Unleashing Protocol Buffers Evolution<br/>
+<div style="font-size: 3rem;">Unleashing Protocol Buffers Evolution</div>
+<div style="font-size: 1.5rem;">by Matt Kulukundis and Mike Kruskal</div>
 <a style="font-size: 1.1rem;" href="https://github.com/fowles/unleashing-protobuf-evolution">https://github.com/fowles/unleashing-protobuf-evolution</a><br/>
-by Matt Kulukundis and Mike Kruskal
 </div>
 
 <div style="font-size: 0.8rem; color: white" class="absolute bottom-0">press "S" for speaker view</div>
@@ -130,8 +130,8 @@ that protobuf was designed for. Adding fields, marking old fields as reserved,
 handling of unknown fields.  This is the bread and butter of the protobuf
 ecosystem.
 
-**Those little wires between boxes.  Those are the protobuf wire format.  Let's
-walk though a basic example of *Schema Evolution*.**
+**Those little wires between all the boxes are the protobuf wire format.  Let's
+zoom in a bit and walk though a basic example of *Schema Evolution*.**
 
 *ADVANCE*
 
@@ -162,11 +162,14 @@ NOTES:
 
 *ADVANCE*
 
-**along with the wire format that someone might get from it.  The first byte
-`0A` indicates field 1 has length encoded content.  The second byte `17` is the
-length of the string field.  Rather then inflict too much more binary on you
-though, I am going to switch to protoscope's notation.  Protoscope is a tool
-for decoding protobuf wireformat in a slightly nicer way.**
+**along with the wire format that someone might get from it.**
+
+*ADVANCE*
+
+**The first byte `0A` indicates field 1 has length encoded content.  The
+second byte `17` is the length of the string field.  Rather than inflicting
+too much more binary on you though, I'm going to introduce you to a new tool
+that we developed for decoding the protobuf wireformat in a slightly nicer way.**
 
 *ADVANCE*
 
@@ -189,8 +192,9 @@ NOTES:
 
 **SLOW DOWN**
 
-**Now imagine the client had a newer schema for person that included an address
-field.**
+**This notation comes from the Protoscope tool, and is equivalent to the encoded
+binary, but is much more readable. Now imagine the client had a newer schema for
+person that included an address field.**
 
 *ADVANCE*
 
@@ -241,9 +245,9 @@ NOTES:
 
 **SLOW DOWN**
 
-**Fortunately, protobuf has semantics for unknown fields baked into it.  Schema
-evolution has been planned for from the beginning and is thus handled
-smoothly.**
+**The server won't know about the address field, but fortunately Protobuf
+has semantics for unknown fields baked into it.  Schema evolution has been
+planned for from the beginning and is therefore handled smoothly.**
 
 You could imagine adding new tag types. But that requires updating parsers to
 accept the new format and waiting years to decades for all existing parsers to
@@ -284,7 +288,7 @@ NOTES:
 
 **SLOW DOWN**
 
-Consider the evolution of one componenet, a single piece of software.  Adding
+Consider the evolution of one component, a single piece of software.  Adding
 features, upgrading libraries, updating language versions.  All the things that
 go into a single piece of software.
 
@@ -394,9 +398,9 @@ us fix historical mistakes and replace inefficient designs.  This is the target
 we are actually aiming for.  How do we apply the lessons from python 2 to 3 to
 this problem?
 
-So how do we apply this concept to protobuf?  What we want is to powerful
+So how do we apply this concept to protobuf?  What we want is powerful
 primitives to enable evolution of generated APIs. But, we are currently in a
-worse state then Python 2 to 3.  We don't have any tools or mechanisms for
+worse state than Python 2 to 3.  We don't have any tools or mechanisms for
 incremental evolution.
 
 **So the question becomes, how do we create the equivalents of `2to3` and
@@ -444,13 +448,14 @@ NOTES:
 
 **SLOW DOWN**
 
-**Before diving into editions though, we need to understand what `syntax =
-"proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big bundle of
-immutable configuration switches.  There is nothing incremental between them.  There is no
-control over the switches directly.  No one had a migration plan for `proto2` to
-`proto3`.**
+**Before diving into editions, let's talk about proto2 and proto3.  These can be thought of
+as two different representations of an underlying common language.  On the wire they're identical
+and they can work in conjunction with each other, they just have slightly different semantics.**
 
-**This rigidity is one of our major problems.  Instead we will pivot to *editions*.**
+**Unfortunately, nobody had a migration plan for proto2 to proto3.  Because of that, there's no
+way to switch between them incrementally, and the differences are all-or-nothing.**
+
+**This rigidity is one of our major problems.  Instead, we will pivot to *editions*.**
 
 *ADVANCE*
 
@@ -467,8 +472,8 @@ NOTES:
 
 **SLOW DOWN**
 
-**Rather than immutable configuration, an edition is a set of defaults that can
-be overriden.   We call each of these configurable things *features*.**
+**Rather than the current all-or-nothing set of configuration changes, an edition is a set of
+defaults that can be overriden.  We call each of the configurable differences *features*.**
 
 *ADVANCE*
 
@@ -711,7 +716,7 @@ specify the feature at the top level.**
 
 **As an aside, you may be asking yourselves "what is this syntax we're using?".  This is a
 pre-existing syntax in protobuf files for *custom options*.  The only changes to the protobuf
-grammar required for this are for the first `edition` line.**
+grammar required for this are for the first line where we specify the `edition`.**
 
 *ADVANCE*
 
@@ -730,9 +735,11 @@ NOTES:
 
 **Using custom options allows each language generator space to evolve its own
 features independently.  This allows third-party language generators to play on
-equal footing with the ones built into `protoc`. Together these give us `import
+equal footing with the ones built into `protoc`.**
+
+**Together, editions and features give us an equivalent to Python's `import
 __future__`, `import __past__`, and a way to know what time it is.  But we still
-need a `2to3` tool.**
+need an equivalent to the `2to3` tool.**
 
 *ADVANCE*
 
@@ -916,9 +923,9 @@ NOTES:
 Well, this is kinda embarrassing.  Honestly, this is most a sneak peak of where
 we are going.  Most of this is vaporware right now...
 
-**Most of the core design work is done.  We've already started implementing
+Most of the core design work is done.  We've already started implementing
 these and hope to release prototiller this year.  Early support in
-parsers and code generators for editions should be ready next year.**
+parsers and code generators for editions should be ready next year.
 
 *ADVANCE*
 
