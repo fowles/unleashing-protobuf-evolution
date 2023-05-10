@@ -192,9 +192,9 @@ NOTES:
 
 **SLOW DOWN**
 
-**This notation is equivalent to the encoded binary, but is much more readable.
-Now imagine the client had a newer schema for person that included an address
-field.**
+**This notation comes from the Protoscope tool, and is equivalent to the encoded
+binary, but is much more readable. Now imagine the client had a newer schema for
+person that included an address field.**
 
 *ADVANCE*
 
