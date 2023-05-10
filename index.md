@@ -448,13 +448,14 @@ NOTES:
 
 **SLOW DOWN**
 
-**Before diving into editions though, we need to understand what `syntax =
-"proto2"` and `syntax = "proto3"` mean.  Each of these indicates a big bundle of
-immutable configuration switches.  There is nothing incremental between them.  There is no
-control over the switches directly.  No one had a migration plan for `proto2` to
-`proto3`.**
+**Before diving into editions, let's talk about proto2 and proto3.  These can be thought of
+as two different representations of an underlying common language.  On the wire they're identical
+and they can work in conjunction with each other, they just have slightly different semantics.**
 
-**This rigidity is one of our major problems.  Instead we will pivot to *editions*.**
+**Unfortunately, nobody had a migration plan for proto2 to proto3.  Because of that, there's no
+way to switch between them incrementally, and the differences are all-or-nothing.**
+
+**This rigidity is one of our major problems.  Instead, we will pivot to *editions*.**
 
 *ADVANCE*
 
@@ -471,8 +472,8 @@ NOTES:
 
 **SLOW DOWN**
 
-**Rather than immutable configuration, an edition is a set of defaults that can
-be overriden.   We call each of these configurable things *features*.**
+**Rather than the current all-or-nothing set of configuration changes, an edition is a set of
+defaults that can be overriden.  We call each of the configurable differences *features*.**
 
 *ADVANCE*
 
