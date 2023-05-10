@@ -716,7 +716,7 @@ specify the feature at the top level.**
 
 **As an aside, you may be asking yourselves "what is this syntax we're using?".  This is a
 pre-existing syntax in protobuf files for *custom options*.  The only changes to the protobuf
-grammar required for this are for the first `edition` line.**
+grammar required for this are for the first line where we specify the `edition`.**
 
 *ADVANCE*
 
@@ -735,9 +735,11 @@ NOTES:
 
 **Using custom options allows each language generator space to evolve its own
 features independently.  This allows third-party language generators to play on
-equal footing with the ones built into `protoc`. Together these give us `import
+equal footing with the ones built into `protoc`.**
+
+**Together, editions and features give us an equivalent to Python's `import
 __future__`, `import __past__`, and a way to know what time it is.  But we still
-need a `2to3` tool.**
+need an equivalent to the `2to3` tool.**
 
 *ADVANCE*
 
