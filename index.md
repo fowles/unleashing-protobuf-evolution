@@ -1,9 +1,9 @@
 <!-- .slide: data-background="./antikythera.jpg" -->
 
 <div class="area fragment">
-Unleashing Protocol Buffers Evolution<br/>
+<div style="font-size: 3rem;">Unleashing Protocol Buffers Evolution</div>
+<div style="font-size: 1.5rem;">by Matt Kulukundis and Mike Kruskal</div>
 <a style="font-size: 1.1rem;" href="https://github.com/fowles/unleashing-protobuf-evolution">https://github.com/fowles/unleashing-protobuf-evolution</a><br/>
-by Matt Kulukundis and Mike Kruskal
 </div>
 
 <div style="font-size: 0.8rem; color: white" class="absolute bottom-0">press "S" for speaker view</div>
