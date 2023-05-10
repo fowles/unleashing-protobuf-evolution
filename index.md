@@ -398,7 +398,7 @@ us fix historical mistakes and replace inefficient designs.  This is the target
 we are actually aiming for.  How do we apply the lessons from python 2 to 3 to
 this problem?
 
-So how do we apply this concept to protobuf?  What we want is to powerful
+So how do we apply this concept to protobuf?  What we want is powerful
 primitives to enable evolution of generated APIs. But, we are currently in a
 worse state than Python 2 to 3.  We don't have any tools or mechanisms for
 incremental evolution.
