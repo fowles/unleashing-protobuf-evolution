@@ -162,11 +162,15 @@ NOTES:
 
 *ADVANCE*
 
-**along with the wire format that someone might get from it.  The first byte
-`0A` indicates field 1 has length encoded content.  The second byte `17` is the
-length of the string field.  Rather then inflict too much more binary on you
-though, I am going to switch to protoscope's notation.  Protoscope is a tool
-for decoding protobuf wireformat in a slightly nicer way.**
+**along with the wire format that someone might get from it.**
+
+*ADVANCE*
+
+**The first byte `0A` indicates field 1 has length encoded content.  The
+second byte `17` is the length of the string field.  Rather than inflict
+too much more binary on you though, I am going to switch to protoscope's
+notation.  Protoscope is a tool for decoding protobuf wireformat in a
+slightly nicer way.**
 
 *ADVANCE*
 
