@@ -914,6 +914,8 @@ ecosystem that has value far beyond simply updating to the latest edition.
 
 <div class="area fragment">
 Questions?
+<br />
+<a mailto="protobuf-team@google.com" style="font-size:2rem">protobuf-team@</a>
 </div>
 
 NOTES:
