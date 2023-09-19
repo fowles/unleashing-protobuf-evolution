@@ -362,8 +362,8 @@ The `2to3` tool helped a lot despite its rough edges.
 
 *ADVANCE*
 
-**`import __future__` allowed libraries to pre-migrate before
-the rest of code was ready.**
+`import __future__` allowed libraries to pre-migrate before
+the rest of code was ready.
 
 *ADVANCE*
 
