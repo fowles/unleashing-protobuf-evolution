@@ -904,7 +904,7 @@ format evolution perspective, or no-ops from a generated code perspective.
 We hope that this tool will provide a baseline capability for the protobuf
 ecosystem that has value far beyond simply updating to the latest edition.
 
-**All this sounds great, but when can I use it?**
+How long until it's released?
 
 *ADVANCE*
 
@@ -922,12 +922,9 @@ NOTES:
 
 **SLOW DOWN**
 
-Well, this is kinda embarrassing.  Honestly, this is most a sneak peak of where
-we are going.  Most of this is vaporware right now...
-
-Most of the core design work is done.  We've already started implementing
-these and hope to release prototiller this year.  Early support in
-parsers and code generators for editions should be ready next year.
+**We've fully implemented editions in C++, and it's been publicly available since 24.0 behind an experimental flag.
+We're currently working on rolling it out to Java, Python, Ruby, and PHP, and they should be available
+by the end of the year.  Protiller is still being developed, but we're focused on finishing editions first.**
 
 *ADVANCE*
 
